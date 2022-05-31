@@ -8,7 +8,8 @@ import "./style/app.scss"
 
 function App() {
 
-const taskLists = [{name: "Clean Bar", completed: false, id:"1"}, {name: "Clean floor", completed: false, id:"2"}]
+
+const taskLists = [{name: "Clean Bar", completed: false, date_completed: null  , lifetime: 10 }, {name: "Clean floor", completed: false, date_completed: null, lifetime: 30 }]
 
 const [tasks, setTasks] = useState([])
 
@@ -34,17 +35,21 @@ useEffect (() => {
 
     const stateData = await Promise.allSettled(data.docs.map(async item => {
       const payload = {...item.data(), id: item.id};
-      if (item.data().name === "Clean") {
+      let dateNow = new Date();
+      let actualTime = dateNow.getTime() / 1000
+   
+      if ((actualTime - item.data().date_completed > item.data().lifetime)) {
         const tasksDoc =   doc(db, "tasks", item.id);
-        const newField = {date: "updated"};
-        await updateDoc(tasksDoc, newField);
-        payload.date = newField.date;
-      }
+        const newField = {completed: false};
 
+        await updateDoc(tasksDoc, newField);
+        payload.completed = newField.completed; 
+      }
       return new Promise((resolve) => resolve(payload));
     }));
 
     setTasks(stateData.map(({value}) => value));
+
   }
   getData();
 }, [])
@@ -62,14 +67,15 @@ const addData = async () => {
 
 
 // Update Data
-const updateData = async (id, completed, date, test) => {
+const updateData = async (id, completed, date) => {
   const d = new Date();
   const today = d.getDate(date)+' '+ d.toLocaleString('default',{month: 'long'},date);
+  let getTime = d.getTime() / 1000
 
   const tasksDoc = await doc(db, "tasks", id);
-  const newField = {completed: !completed, date: today };
+  const newField = {completed: !completed, date: today, date_completed: getTime  };
   await updateDoc(tasksDoc, newField)
-
+  
   const data = await getDocs(collection(db, "tasks"));
   setTasks(data.docs.map(doc => ({...doc.data(), id: doc.id})));
 }

@@ -10,6 +10,7 @@ function Task(props) {
            <div>
            <button onClick = {() => props.updateData(props.id, props.completed, props.date, true)}> Completed </button>
            <button onClick = {() => props.deleteData(props.id)}> Delete </button>
+
            </div>
            </div>
   
