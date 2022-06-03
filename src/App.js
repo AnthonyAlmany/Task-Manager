@@ -4,10 +4,9 @@ import Task from "./components/Task"
 import {db} from "./firebase-config"
 import { collection, addDoc, getDocs, updateDoc, deleteDoc, writeBatch, doc} from "firebase/firestore"; 
 
-import "./style/app.scss"
+import "./style/app.scss";
 
 function App() {
-
 
 const taskLists = [{name: "Clean Bar", completed: false, date_completed: null  , lifetime: 10 }, {name: "Clean floor", completed: false, date_completed: null, lifetime: 30 }]
 
@@ -39,7 +38,7 @@ useEffect (() => {
       let actualTime = dateNow.getTime() / 1000
    
       if ((actualTime - item.data().date_completed > item.data().lifetime)) {
-        const tasksDoc =   doc(db, "tasks", item.id);
+        const tasksDoc = doc(db, "tasks", item.id);
         const newField = {completed: false};
 
         await updateDoc(tasksDoc, newField);
@@ -73,7 +72,7 @@ const updateData = async (id, completed, date) => {
   let getTime = d.getTime() / 1000
 
   const tasksDoc = await doc(db, "tasks", id);
-  const newField = {completed: !completed, date: today, date_completed: getTime  };
+  const newField = {completed: true, date: today, date_completed: getTime  };
   await updateDoc(tasksDoc, newField)
   
   const data = await getDocs(collection(db, "tasks"));
@@ -91,20 +90,21 @@ const deleteData = async(id) => {
 
 
 // Switch Completed Property
-function taskclickHandler() {
-let mapped = tasks.map( task => task.id === this.id ? {...task, completed: !task.completed} : {...task});
-setTasks(mapped);
-}
+// function taskclickHandler() {
+// let mapped = tasks.map( task => task.id === this.id ? {...task, completed: !task.completed} : {...task});
+// setTasks(mapped);
+// }
 
 
   return (
     <div className="App">
 
 <div className="task-container">
+  
 {tasks.map(task => 
   
   <Task 
-  clickHandler={taskclickHandler.bind(task)}
+  // clickHandler={taskclickHandler.bind(task)}
   updateData={updateData.bind(task)} 
   deleteData={deleteData.bind(task)} 
   id={task.id} 
