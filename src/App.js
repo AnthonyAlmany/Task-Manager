@@ -8,7 +8,7 @@ import "./style/app.scss";
 
 function App() {
 
-const taskLists = [{name: "Clean Bar", completed: false, date_completed: null  , lifetime: 10 }, {name: "Clean floor", completed: false, date_completed: null, lifetime: 30 }]
+const taskLists = [{name: "Clean Bar", completed: false, date_completed: null  , lifetime: 10, type: "Bar" }, {name: "Clean floor", completed: false, date_completed: null, lifetime: 30, type: "Floor" }]
 
 const [tasks, setTasks] = useState([])
 
@@ -100,8 +100,17 @@ const deleteData = async(id) => {
     <div className="App">
 
 <div className="task-container">
-  
-{tasks.map(task => 
+  <div className="task-header">
+
+  <button>Bar</button>
+  <button>Floor</button>
+  <button>Select</button>
+
+
+  </div>
+
+  <div className="task-list">
+  {tasks.map(task => 
   
   <Task 
   // clickHandler={taskclickHandler.bind(task)}
@@ -115,8 +124,9 @@ const deleteData = async(id) => {
   test={task.test}
   />
  )}
-    <button onClick={initDb}>Init Data</button>
-    <button onClick={addData}>Add Data</button>
+  </div>
+
+
 </div>
 
     </div>
@@ -127,7 +137,8 @@ const deleteData = async(id) => {
 export default App;
 
 
-
+// {/* <button onClick={initDb}>Init Data</button>
+// <button onClick={addData}>Add Data</button> */}
 
 // Get Data
 // useEffect (() => {
