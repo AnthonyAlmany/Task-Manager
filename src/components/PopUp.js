@@ -18,7 +18,7 @@ function PopUp(props) {
                  <Button variant="secondary" onClick={props.handleClose}>
                    Close
                  </Button>
-                 <Button variant="primary" onClick={() => {props.handleClose(); props.updateData(props.id, props.completed, props.date);}}>
+                 <Button variant="primary" onClick={() => {props.handleClose(); props.updateData(props.id, props.completed, props.date, props.completedBy);}}>
                    Complete
                  </Button>
              </Modal.Footer>

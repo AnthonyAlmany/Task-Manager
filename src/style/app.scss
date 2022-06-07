@@ -57,6 +57,30 @@
         cursor: pointer;
     }
 }
+
+#button-selected{
+    background-color: #f5f6f7;
+    color: #cc9138;
+}
+#button-noselect{
+    background-color: #cc9138;
+    color: #f5f6f7;
+}
+
+select{
+    background-color: #cc9138;
+    color: #f5f6f7;
+    font-weight: bold;
+    font-family: 'Nunito', sans-serif;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    padding: 2px 2px;
+    outline: none;
+    cursor: pointer;
+}
+
+
 .task-list{
     width: 80%;
     @include flex-container();
@@ -98,10 +122,10 @@
     button{
         border-radius: 20px;
         border: 1px solid #00aa69;
+        background: #f5f6f7;
         color: #00aa69;
         font-weight: bold;
         padding: 2px 8px;       
-        background: #f5f6f7;
         cursor: pointer;
     }
 
@@ -109,3 +133,6 @@
 
 
 
+#popover-custom{
+    display: none;
+}

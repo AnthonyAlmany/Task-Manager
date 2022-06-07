@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import Task from "./components/Task"
+import IndexButton from "./components/IndexButton";
 
 import {db} from "./firebase-config"
 import { collection, addDoc, getDocs, updateDoc, deleteDoc, writeBatch, doc} from "firebase/firestore"; 
@@ -8,9 +9,14 @@ import "./style/app.scss";
 
 function App() {
 
-const taskLists = [{name: "Clean Bar", completed: false, date_completed: null  , lifetime: 10, type: "Bar" }, {name: "Clean floor", completed: false, date_completed: null, lifetime: 30, type: "Floor" }]
+const taskLists = [{name: "Clean Bar", completed: false, date_completed: null, completedBy: undefined , lifetime: 10, type: "Bar" }, {name: "Clean floor", completed: false, date_completed: null,completedBy: undefined , lifetime: 30, type: "Floor" }]
+const buttonList = [{name: "Bar"}, {name: "Floor"}]
+const staffList = [{name:"Select Name"},{name:"foo"},{name:"bar"}]
 
-const [tasks, setTasks] = useState([])
+
+const [tasks, setTasks] = useState([]);
+const [taskIndex, setTaskIndex] = useState("Bar");
+const [selectValue, setSelectValue] = useState("Select Name");
 
 
 async function initDb() {
@@ -24,7 +30,6 @@ async function initDb() {
  await batch.commit();
 
 }
-
 
 // Get Data
 useEffect (() => {
@@ -66,13 +71,13 @@ const addData = async () => {
 
 
 // Update Data
-const updateData = async (id, completed, date) => {
+const updateData = async (id, completed, date, completedBy) => {
   const d = new Date();
   const today = d.getDate(date)+' '+ d.toLocaleString('default',{month: 'long'},date);
   let getTime = d.getTime() / 1000
 
   const tasksDoc = await doc(db, "tasks", id);
-  const newField = {completed: true, date: today, date_completed: getTime  };
+  const newField = {completed: true, date: today, date_completed: getTime, completedBy: selectValue};
   await updateDoc(tasksDoc, newField)
   
   const data = await getDocs(collection(db, "tasks"));
@@ -89,29 +94,37 @@ const deleteData = async(id) => {
 }
 
 
-// Switch Completed Property
-// function taskclickHandler() {
-// let mapped = tasks.map( task => task.id === this.id ? {...task, completed: !task.completed} : {...task});
-// setTasks(mapped);
-// }
+// Filter Task "type" onClick through index buttons
+function selectType (type) {
+  setTaskIndex(type)
+};
 
+const handleChange = (e) => {
+  setSelectValue(e.target.value)
+}
 
   return (
     <div className="App">
 
-<div className="task-container">
+  <div className="task-container">
   <div className="task-header">
 
-  <button>Bar</button>
-  <button>Floor</button>
-  <button>Select</button>
+  {buttonList.map(button =>
+    <IndexButton name={button.name} selectType={selectType} taskIndex={taskIndex} key={button.name}/> 
+    )}
 
+   <div className="select-container">
+ <select value={selectValue} onChange={handleChange} >
+    {staffList.map((option) => (
+        <option key={option.name} value={option.name}>{option.name}</option>
+    ))}
+</select>
+</div>
 
   </div>
 
   <div className="task-list">
-  {tasks.map(task => 
-  
+  {tasks.filter(task => task.type === taskIndex).map(task => 
   <Task 
   // clickHandler={taskclickHandler.bind(task)}
   updateData={updateData.bind(task)} 
@@ -120,12 +133,14 @@ const deleteData = async(id) => {
   name={task.name} 
   key={task.id} 
   completed={task.completed} 
+  completedBy ={task.completedBy}
   date={task.date} 
   test={task.test}
+  selectValue={selectValue}
   />
  )}
   </div>
-
+  {/* <button onClick={initDb}>Init Data</button> */}
 
 </div>
 
@@ -160,7 +175,11 @@ export default App;
 //  getData();
 // }, [])
 
-
+// Switch Completed Property
+// function taskclickHandler() {
+// let mapped = tasks.map( task => task.id === this.id ? {...task, completed: !task.completed} : {...task});
+// setTasks(mapped);
+// }
 
 
 
