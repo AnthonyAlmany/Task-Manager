@@ -25,17 +25,12 @@ function Task(props) {
         </Popover.Body>
       </Popover>
     );
-
-    const noPopover = (
-       <Popover id="popover-custom"></Popover>
-    );
-
   
 
     return (
       
            <div className='task-item'>
-          <FontAwesomeIcon icon={props.completed ? faSmile : faFrown} color={props.completed ? "green" : "red"} size="xl" id="icon"/>
+          <FontAwesomeIcon icon={props.completed ? faSmile : faFrown} color={props.completed ? "green" : "red"} id="icon"/>
      
           <div className='task-elements'>
               <div className='task-name'>
@@ -43,7 +38,7 @@ function Task(props) {
               <h4>{props.date !== null ? `Completed on: ${props.date} by ${props.completedBy}` : `Not completed yet`}</h4>
               </div>
           
-              <OverlayTrigger trigger="click" placement="right" overlay={props.selectValue === "Select Name" ? popover : noPopover} rootClose={true} >
+              <OverlayTrigger trigger="click" placement="right" overlay={popover} onToggle={() => props.selectValue !== 'Select Name'}  rootClose={true} >
             <button  onClick={() => props.selectValue !== "Select Name" && handleShow()}>Complete</button>     
               </OverlayTrigger> 
       

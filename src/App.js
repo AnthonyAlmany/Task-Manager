@@ -109,9 +109,12 @@ const handleChange = (e) => {
   <div className="task-container">
   <div className="task-header">
 
+<div className="task-index">
   {buttonList.map(button =>
     <IndexButton name={button.name} selectType={selectType} taskIndex={taskIndex} key={button.name}/> 
     )}
+</div>
+
 
    <div className="select-container">
  <select value={selectValue} onChange={handleChange} >
