@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import Task from "./components/Task"
 import IndexButton from "./components/IndexButton";
+import taskLists from "./taskList";
 
 import {db} from "./firebase-config"
 import { collection, addDoc, getDocs, updateDoc, deleteDoc, writeBatch, doc} from "firebase/firestore"; 
@@ -9,9 +10,9 @@ import "./style/app.scss";
 
 function App() {
 
-const taskLists = [{name: "Clean Bar", completed: false, date_completed: null, completedBy: undefined , lifetime: 10, type: "Bar" }, {name: "Clean floor", completed: false, date_completed: null,completedBy: undefined , lifetime: 30, type: "Floor" }]
+
 const buttonList = [{name: "Bar"}, {name: "Floor"}]
-const staffList = [{name:"Select Name"},{name:"foo"},{name:"bar"}]
+const staffList = [{name:"Select Name"},{name:"Anthony"},{name:"Lily"},{name:"Katia"},{name:"Laila"},{name:"Augusto"},{name:"Maria"},{name:"Tianna"},]
 
 
 const [tasks, setTasks] = useState([]);
@@ -62,7 +63,7 @@ useEffect (() => {
 
 // Add Data
 const addData = async () => { 
-  await addDoc(collection(db, "tasks"), {name: "Clean", completed: false, date: null, test: true}, );
+  await addDoc(collection(db, "tasks"), {name: "Clean", completed: false, date: null, test: true, type:"Bar"}, );
 
   const data = await getDocs(collection(db, "tasks"));
   setTasks(data.docs.map(doc => ({...doc.data(), id: doc.id})));
@@ -143,7 +144,7 @@ const handleChange = (e) => {
   />
  )}
   </div>
-  {/* <button onClick={initDb}>Init Data</button> */}
+
 
 </div>
 

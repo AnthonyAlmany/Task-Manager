@@ -18,14 +18,17 @@ function Task(props) {
     const handleShow = () => setShow(true);
 
     const popover = (
-      <Popover id="popover-basic">
-        <Popover.Header as="h3">No name selected</Popover.Header>
-        <Popover.Body>
+      <Popover className='popover' id="popover-basic">
+        <Popover.Header className='"popover-header' as="h4">No name selected</Popover.Header>
+        <Popover.Body className='"popover-body'>
           Select your employee's name to complete the task.
         </Popover.Body>
       </Popover>
     );
   
+    const noPopover = (
+      <Popover id="popover-custom"></Popover>
+   );
 
     return (
       
@@ -35,13 +38,13 @@ function Task(props) {
           <div className='task-elements'>
               <div className='task-name'>
               <h2>{props.name}</h2>
-              <h4>{props.date !== null ? `Completed on: ${props.date} by ${props.completedBy}` : `Not completed yet`}</h4>
+              <h4 id="completed">{props.date !== undefined ? `Completed on: ${props.date} by ${props.completedBy}` : `Not completed yet`}</h4>
               </div>
           
-              <OverlayTrigger trigger="click" placement="right" overlay={popover} onToggle={() => props.selectValue !== 'Select Name'}  rootClose={true} >
+              <OverlayTrigger trigger="click" placement="bottom" overlay={props.selectValue === "Select Name" ? popover : noPopover}  rootClose={true} >
             <button  onClick={() => props.selectValue !== "Select Name" && handleShow()}>Complete</button>     
               </OverlayTrigger> 
-      
+               
           </div>
 
            <div>
