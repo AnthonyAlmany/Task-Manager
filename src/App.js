@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from "react";
 import Task from "./components/Task"
 import IndexButton from "./components/IndexButton";
-import taskLists from "./taskList";
+// import taskLists from "./taskList";
 
 import {db} from "./firebase-config"
-import { collection, addDoc, getDocs, updateDoc, deleteDoc, writeBatch, doc} from "firebase/firestore"; 
+import { collection, getDocs, updateDoc, deleteDoc, doc} from "firebase/firestore"; 
+// addDoc, writeBatch
 
 import "./style/app.scss";
 
@@ -20,17 +21,17 @@ const [taskIndex, setTaskIndex] = useState("Bar");
 const [selectValue, setSelectValue] = useState("Select Name");
 
 
-async function initDb() {
-  const batch = writeBatch(db);
+// async function initDb() {
+//   const batch = writeBatch(db);
 
-  taskLists.forEach(async task => {
-    const docRef = doc(db, "tasks", task.name);
-    batch.set(docRef, task);
-  });
+//   taskLists.forEach(async task => {
+//     const docRef = doc(db, "tasks", task.name);
+//     batch.set(docRef, task);
+//   });
 
- await batch.commit();
+//  await batch.commit();
 
-}
+// }
 
 // Get Data
 useEffect (() => {
@@ -62,12 +63,12 @@ useEffect (() => {
 
 
 // Add Data
-const addData = async () => { 
-  await addDoc(collection(db, "tasks"), {name: "Clean", completed: false, date: null, test: true, type:"Bar"}, );
+// const addData = async () => { 
+//   await addDoc(collection(db, "tasks"), {name: "Clean", completed: false, date: null, test: true, type:"Bar"}, );
 
-  const data = await getDocs(collection(db, "tasks"));
-  setTasks(data.docs.map(doc => ({...doc.data(), id: doc.id})));
-};
+//   const data = await getDocs(collection(db, "tasks"));
+//   setTasks(data.docs.map(doc => ({...doc.data(), id: doc.id})));
+// };
 
 
 
