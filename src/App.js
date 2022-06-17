@@ -143,6 +143,7 @@ const handleChange = (e) => {
   selectValue={selectValue}
   />
  )}
+  {/* <button onClick={initDb}>Init Data</button> */}
   </div>
 
 
