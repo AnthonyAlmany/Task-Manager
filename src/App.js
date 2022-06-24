@@ -73,13 +73,14 @@ useEffect (() => {
 
 
 // Update Data
-const updateData = async (id, completed, date, completedBy) => {
+const updateData = async (id, date, date_completed, lifetime) => {
   const d = new Date();
   const today = d.getDate(date)+' '+ d.toLocaleString('default',{month: 'long'},date);
-  let getTime = d.getTime() / 1000
+  const getTime = d.getTime() / 1000
+ const foo = getTime
 
   const tasksDoc = await doc(db, "tasks", id);
-  const newField = {completed: true, date: today, date_completed: getTime, completedBy: selectValue};
+  const newField = {completed: true, date: today, date_completed: getTime, completedBy: selectValue, foo: foo};
   await updateDoc(tasksDoc, newField)
   
   const data = await getDocs(collection(db, "tasks"));
@@ -139,9 +140,12 @@ const handleChange = (e) => {
   key={task.id} 
   completed={task.completed} 
   completedBy ={task.completedBy}
+  date_completed={task.date_completed}
   date={task.date} 
   test={task.test}
   selectValue={selectValue}
+  lifetime ={task.lifetime}
+  foo = {task.foo}
   />
  )}
   {/* <button onClick={initDb}>Init Data</button> */}

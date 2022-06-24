@@ -25,6 +25,15 @@ function Task(props) {
         </Popover.Body>
       </Popover>
     );
+
+    const infoPopover = (
+      <Popover id='info'>
+        <Popover.Body id="info-body">
+        <p>Lifetime: {props.lifetime / 86400} days.</p> 
+        <p>{props.date_completed !== null ? `To be completed again in ${((props.date_completed + props.lifetime)-props.foo)/86400} days.` : `Not completed yet.`}</p> 
+        </Popover.Body>
+      </Popover>
+    );
   
     const noPopover = (
       <Popover id="popover-custom"></Popover>
@@ -41,9 +50,15 @@ function Task(props) {
               <h4 id="completed">{props.date !== undefined ? `Completed on: ${props.date} by ${props.completedBy}` : `Not completed yet`}</h4>
               </div>
           
-              <OverlayTrigger trigger="click" placement="bottom" overlay={props.selectValue === "Select Name" ? popover : noPopover}  rootClose={true} >
+          <div className='buttons-container'>
+          <OverlayTrigger trigger="click" placement="bottom" overlay={props.selectValue === "Select Name" ? popover : noPopover}  rootClose={true} >
             <button  onClick={() => props.selectValue !== "Select Name" && handleShow()}>Complete</button>     
               </OverlayTrigger> 
+              <OverlayTrigger trigger="click" placement="bottom" overlay={infoPopover}  rootClose={true} >
+              <button id='button-info'>?</button>  
+              </OverlayTrigger> 
+          </div>
+      
                
           </div>
 
