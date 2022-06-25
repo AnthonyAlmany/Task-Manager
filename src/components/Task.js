@@ -12,6 +12,9 @@ import { faSmile, faFrown } from '@fortawesome/free-solid-svg-icons'
 
 function Task(props) {
 
+  let date = Date.now()
+
+
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -30,7 +33,7 @@ function Task(props) {
       <Popover id='info'>
         <Popover.Body id="info-body">
         <p>Lifetime: {props.lifetime / 86400} days.</p> 
-        <p>{props.date_completed !== null ? `To be completed again in ${((props.date_completed + props.lifetime)-props.foo)/86400} days.` : `Not completed yet.`}</p> 
+        <p>{props.date_completed !== null ? `To be completed again in ${Math.floor( (props.lifetime + props.date_completed - date/1000) /86400)} days.` : `Not completed yet.`}</p> 
         </Popover.Body>
       </Popover>
     );
