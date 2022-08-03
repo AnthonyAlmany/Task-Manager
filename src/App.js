@@ -77,10 +77,10 @@ const updateData = async (id, date, date_completed, lifetime) => {
   const d = new Date();
   const today = d.getDate(date)+' '+ d.toLocaleString('default',{month: 'long'},date);
   const getTime = d.getTime() / 1000
- const foo = getTime
+
 
   const tasksDoc = await doc(db, "tasks", id);
-  const newField = {completed: true, date: today, date_completed: getTime, completedBy: selectValue, foo: foo};
+  const newField = {completed: true, date: today, date_completed: getTime, completedBy: selectValue};
   await updateDoc(tasksDoc, newField)
   
   const data = await getDocs(collection(db, "tasks"));
@@ -145,7 +145,6 @@ const handleChange = (e) => {
   test={task.test}
   selectValue={selectValue}
   lifetime ={task.lifetime}
-  foo = {task.foo}
   />
  )}
   {/* <button onClick={initDb}>Init Data</button> */}

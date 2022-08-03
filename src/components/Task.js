@@ -12,13 +12,12 @@ import { faSmile, faFrown } from '@fortawesome/free-solid-svg-icons'
 
 function Task(props) {
 
-  let date = Date.now()
-
-
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    let date = Date.now()
 
     const popover = (
       <Popover className='popover' id="popover-basic">
