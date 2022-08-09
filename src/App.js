@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from "react";
 import Task from "./components/Task"
 import IndexButton from "./components/IndexButton";
-// import taskLists from "./taskList";
+import {staffList, buttonList} from "./lists";
+
 
 import {db} from "./firebase-config"
 import { collection, getDocs, updateDoc, deleteDoc, doc} from "firebase/firestore"; 
@@ -10,11 +11,6 @@ import { collection, getDocs, updateDoc, deleteDoc, doc} from "firebase/firestor
 import "./style/app.scss";
 
 function App() {
-
-
-const buttonList = [{name: "Bar"}, {name: "Floor"}]
-const staffList = [{name:"Select Name"},{name:"Anthony"},{name:"Lily"},{name:"Katia"},{name:"Laila"},{name:"Augusto"},{name:"Maria"},{name:"Tianna"},]
-
 
 const [tasks, setTasks] = useState([]);
 const [taskIndex, setTaskIndex] = useState("Bar");
@@ -33,6 +29,9 @@ const [selectValue, setSelectValue] = useState("Select Name");
 
 // }
 
+
+
+
 // Get Data
 useEffect (() => {
    const getData = async () => {
@@ -43,8 +42,10 @@ useEffect (() => {
       const payload = {...item.data(), id: item.id};
       let dateNow = new Date();
       let actualTime = dateNow.getTime() / 1000
+
+      // console.log([actualTime, item.data().date_completed, item.data().lifetime/86400 ])
    
-      if ((actualTime - item.data().date_completed > item.data().lifetime)) {
+      if ((actualTime - item.data().date_completed > item.data().lifetime/86400)) {
         const tasksDoc = doc(db, "tasks", item.id);
         const newField = {completed: false};
 
@@ -59,7 +60,6 @@ useEffect (() => {
   }
   getData();
 }, [])
-
 
 
 // Add Data
@@ -97,6 +97,18 @@ const deleteData = async(id) => {
 }
 
 
+
+
+useEffect(() => {
+  const timer = setInterval(() => {
+    const hasExpired = task => (((new Date()).getTime() /1000) - task.date_completed) > (task.lifetime/86400);
+    setTasks(tasks.map(task =>  hasExpired(task) ? {...task, completed: false} : {...task})); 
+  }, 1000);               
+  return () => clearInterval(timer);
+});
+
+// if ((actualTime - item.data().date_completed > item.data().lifetime/86400))
+
 // Filter Task "type" onClick through index buttons
 function selectType (type) {
   setTaskIndex(type)
@@ -108,7 +120,9 @@ const handleChange = (e) => {
 
   return (
     <div className="App">
-
+<div className="message">
+  <h4>Demonstration App only. This App's database is stored and updated on Firebase. Each tasks' expiry date has been set in seconds. Completed logo will update once expiry date is reached.</h4>
+</div>
   <div className="task-container">
   <div className="task-header">
 
@@ -146,7 +160,7 @@ const handleChange = (e) => {
   selectValue={selectValue}
   lifetime ={task.lifetime}
   />
- )}
+  )}
   {/* <button onClick={initDb}>Init Data</button> */}
   </div>
 

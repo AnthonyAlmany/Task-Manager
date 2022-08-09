@@ -31,6 +31,15 @@ $green: #00aa69;
     @include flex-container()
 }
 
+.message{
+   
+    h4{
+        color: $white;
+        text-align: center;
+        font-size: calc(14px + (16 - 14) * ((100vw - 300px) / (1600 - 300)));
+    };
+}
+
 .task-container{
     background: rgb(38,35,33);
     background: linear-gradient(168deg, rgba(38,35,33,1) 0%, rgba(50,49,47,1) 100%);

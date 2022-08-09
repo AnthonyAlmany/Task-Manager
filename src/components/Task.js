@@ -18,7 +18,10 @@ function Task(props) {
     const handleShow = () => setShow(true);
 
     let date = Date.now()
+    const timer = Math.floor( (props.lifetime/86400) + (props.date_completed - (date/1000)));
 
+    
+    // console.log([props.lifetime/86400, props.date_completed, date/1000])
     const popover = (
       <Popover className='popover' id="popover-basic">
         <Popover.Header className='"popover-header' as="h4">No name selected</Popover.Header>
@@ -29,10 +32,11 @@ function Task(props) {
     );
 
     const infoPopover = (
+      
       <Popover id='info'>
         <Popover.Body id="info-body">
-        <p>Lifetime: {props.lifetime / 86400} days.</p> 
-        <p>{props.date_completed !== null ? `To be completed again in ${Math.floor( (props.lifetime + props.date_completed - date/1000) /86400)} days.` : `Not completed yet.`}</p> 
+        <p>Lifetime: {props.lifetime / 86400} seconds.</p> 
+        <p>{props.date_completed !== null && timer > 0 ? `To be completed again in ${timer} seconds.` : `Not completed yet.`}</p> 
         </Popover.Body>
       </Popover>
     );
