@@ -20,8 +20,6 @@ function Task(props) {
     let date = Date.now()
     const timer = Math.floor( (props.lifetime/86400) + (props.date_completed - (date/1000)));
 
-    
-    // console.log([props.lifetime/86400, props.date_completed, date/1000])
     const popover = (
       <Popover className='popover' id="popover-basic">
         <Popover.Header className='"popover-header' as="h4">No name selected</Popover.Header>
@@ -32,7 +30,6 @@ function Task(props) {
     );
 
     const infoPopover = (
-      
       <Popover id='info'>
         <Popover.Body id="info-body">
         <p>Lifetime: {props.lifetime / 86400} seconds.</p> 
@@ -63,9 +60,7 @@ function Task(props) {
               <OverlayTrigger trigger="click" placement="bottom" overlay={infoPopover}  rootClose={true} >
               <button id='button-info'>?</button>  
               </OverlayTrigger> 
-          </div>
-      
-               
+          </div>  
           </div>
 
            <div>
@@ -88,6 +83,4 @@ function Task(props) {
 
 export default Task
 
-        //    {/* <button onClick = {() => props.updateData(props.id, props.completed, props.date)}> Completed </button> */}
-        //    {/* <button onClick = {() => props.deleteData(props.id)}> Delete </button> */}
-        // {props.completed ? "true" : "false"},
+ 

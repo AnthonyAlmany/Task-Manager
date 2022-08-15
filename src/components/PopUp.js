@@ -23,9 +23,7 @@ function PopUp(props) {
                  </Button>
              </Modal.Footer>
               </div>
-
              </Modal>
-    
     </div>
   )
 }
@@ -33,11 +31,3 @@ function PopUp(props) {
 export default PopUp
 
 
-// {/* <div className="select-container">
-
-// <select value={day} onChange={handleChange}>
-//     {options.map((option) => (
-//         <option key={uuidv4()} value={option.value}>{option.label}</option>
-//     ))}
-// </select>
-// </div> */}

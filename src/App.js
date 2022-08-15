@@ -3,33 +3,18 @@ import Task from "./components/Task"
 import IndexButton from "./components/IndexButton";
 import {staffList, buttonList} from "./lists";
 
-
+// Firebase
 import {db} from "./firebase-config"
-import { collection, getDocs, updateDoc, deleteDoc, doc} from "firebase/firestore"; 
-// addDoc, writeBatch
+import { collection, getDocs, updateDoc, doc} from "firebase/firestore"; 
 
 import "./style/app.scss";
+
 
 function App() {
 
 const [tasks, setTasks] = useState([]);
 const [taskIndex, setTaskIndex] = useState("Bar");
 const [selectValue, setSelectValue] = useState("Select Name");
-
-
-// async function initDb() {
-//   const batch = writeBatch(db);
-
-//   taskLists.forEach(async task => {
-//     const docRef = doc(db, "tasks", task.name);
-//     batch.set(docRef, task);
-//   });
-
-//  await batch.commit();
-
-// }
-
-
 
 
 // Get Data
@@ -42,9 +27,7 @@ useEffect (() => {
       const payload = {...item.data(), id: item.id};
       let dateNow = new Date();
       let actualTime = dateNow.getTime() / 1000
-
-      // console.log([actualTime, item.data().date_completed, item.data().lifetime/86400 ])
-   
+ 
       if ((actualTime - item.data().date_completed > item.data().lifetime/86400)) {
         const tasksDoc = doc(db, "tasks", item.id);
         const newField = {completed: false};
@@ -56,24 +39,15 @@ useEffect (() => {
     }));
 
     setTasks(stateData.map(({value}) => value));
-
+   
   }
   getData();
+
 }, [])
 
 
-// Add Data
-// const addData = async () => { 
-//   await addDoc(collection(db, "tasks"), {name: "Clean", completed: false, date: null, test: true, type:"Bar"}, );
-
-//   const data = await getDocs(collection(db, "tasks"));
-//   setTasks(data.docs.map(doc => ({...doc.data(), id: doc.id})));
-// };
-
-
-
 // Update Data
-const updateData = async (id, date, date_completed, lifetime) => {
+const updateData = async (id, date) => {
   const d = new Date();
   const today = d.getDate(date)+' '+ d.toLocaleString('default',{month: 'long'},date);
   const getTime = d.getTime() / 1000
@@ -87,18 +61,9 @@ const updateData = async (id, date, date_completed, lifetime) => {
   setTasks(data.docs.map(doc => ({...doc.data(), id: doc.id})));
 }
 
-// Remove Data
-const deleteData = async(id) => {
-  const tasksDoc = doc(db, "tasks", id);
-  await deleteDoc(tasksDoc)
-
-  const data = await getDocs(collection(db, "tasks"));
-  setTasks(data.docs.map(doc => ({...doc.data(), id: doc.id})));
-}
 
 
-
-
+//Update completed property client side on Interval
 useEffect(() => {
   const timer = setInterval(() => {
     const hasExpired = task => (((new Date()).getTime() /1000) - task.date_completed) > (task.lifetime/86400);
@@ -107,7 +72,7 @@ useEffect(() => {
   return () => clearInterval(timer);
 });
 
-// if ((actualTime - item.data().date_completed > item.data().lifetime/86400))
+
 
 // Filter Task "type" onClick through index buttons
 function selectType (type) {
@@ -123,15 +88,14 @@ const handleChange = (e) => {
 <div className="message">
   <h4>Demonstration App only. This App's database is stored and updated on Firebase. Each tasks' expiry date has been set in seconds. Completed logo will update once expiry date is reached.</h4>
 </div>
+
   <div className="task-container">
   <div className="task-header">
-
 <div className="task-index">
   {buttonList.map(button =>
     <IndexButton name={button.name} selectType={selectType} taskIndex={taskIndex} key={button.name}/> 
     )}
 </div>
-
 
    <div className="select-container">
  <select value={selectValue} onChange={handleChange} >
@@ -140,15 +104,12 @@ const handleChange = (e) => {
     ))}
 </select>
 </div>
-
   </div>
 
   <div className="task-list">
   {tasks.filter(task => task.type === taskIndex).map(task => 
   <Task 
-  // clickHandler={taskclickHandler.bind(task)}
   updateData={updateData.bind(task)} 
-  deleteData={deleteData.bind(task)} 
   id={task.id} 
   name={task.name} 
   key={task.id} 
@@ -161,13 +122,9 @@ const handleChange = (e) => {
   lifetime ={task.lifetime}
   />
   )}
-  {/* <button onClick={initDb}>Init Data</button> */}
   </div>
-
-
-</div>
-
     </div>
+      </div>
 
   );
 }
@@ -175,71 +132,3 @@ const handleChange = (e) => {
 export default App;
 
 
-// {/* <button onClick={initDb}>Init Data</button>
-// <button onClick={addData}>Add Data</button> */}
-
-// Get Data
-// useEffect (() => {
-//   const getData = async () => {
-
-// // Update Data before rendering with condition
-// // map through data.docs => conditional rendering => update data => get data
-
-//    const data = await getDocs(collection(db, "tasks"));    
-//    // const outDatedOnly = (item) => item.test;
-
-//    // const updatedData = await Promise.all(data.docs.map((doc) => { 
-//    //   const promise = new Promise((resolve) => resolve({...doc.data(), id: doc.id}));
-//    //   return outDatedOnly({...doc.data(), id: doc.id}) ? resetTask(doc.id) : promise }));
-
-//    // setTasks(updatedData);
-//        setTasks(data.docs.map(doc =>({...doc.data(), id: doc.id })));
-//  }
-//  getData();
-// }, [])
-
-// Switch Completed Property
-// function taskclickHandler() {
-// let mapped = tasks.map( task => task.id === this.id ? {...task, completed: !task.completed} : {...task});
-// setTasks(mapped);
-// }
-
-
-
-
-
-// // Add Data
-// const addData = async () => { 
-//  await addDoc(collection(db, "tasks"), {name: "Clean", completed: false, date: null, test: true} );
-
-//  const data = await getDocs(collection(db, "tasks"));
-//  setTasks(data.docs.map(doc => ({...doc.data(), id: doc.id})));
-// };
-
-// // const resetTask = async (id) => {
-// //   const tasksDoc = await doc(db, "tasks", id);
-// //   const newField = {completed: false, date: null, test: false};
-// //   await updateDoc(tasksDoc, newField);
-
-// //   const promise = Promise((resolve) => resolve({...tasksDoc, ...newField, id: id})); 
-// //   return promise;
-// // };
-
-// // Update Data
-// const updateData = async (id, completed, date, test) => {
-//  const d = new Date();
-//  const today = d.getDate(date)+' '+ d.toLocaleString('default',{month: 'long'},date);
-
-//  const tasksDoc = await doc(db, "tasks", id);
-//  const newField = {completed: !completed, date: today };
-
-//  // if (test !== undefined) { 
-//  //   newField.test = test;
-//  // }
-
-//  await updateDoc(tasksDoc, newField)
-
-//  const data = await getDocs(collection(db, "tasks"));
-
-//  setTasks(data.docs.map(doc => ({...doc.data(), id: doc.id})));
-// }
