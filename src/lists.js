@@ -17,7 +17,7 @@ const taskLists = [
     {name: "Wipe menus",lifetime: (6*1000), completed: false, date_completed: null, completedBy: null, type: "Floor" },
     {name: "Clean under fridges",lifetime: (6*1000), completed: false, date_completed: null, completedBy: null, type: "Floor" },
     {name: "Clean invoice folders",lifetime: (6*1000), completed: false, date_completed: null, completedBy: null, type: "Floor" },
-    {name: "Clean mirrors",lifetime: (12*1000), completed: false, date_completed: null, completedBy: null, type: "Floor" },
+   
     
 ];
 
